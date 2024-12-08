@@ -1,0 +1,93 @@
+html,body {
+  background: url('/assets/guest_resources_bg.jpg') no-repeat center center fixed;
+  background-size: cover;
+  margin: 0;
+  padding: 0;
+  height: 100%; /* Ensure it covers the entire viewport */
+  overflow-y: scroll;
+}
+
+
+
+.container {
+  background-color: #b8d7e2;
+  /*background-color: rgba(126, 151, 226, 0.148); /* Optional: Add a slight overlay for better text visibility */
+  
+  padding: 20px;
+  border-radius: 8px;
+}
+
+
+  .jumbotron {
+    background-color: #f8f9fa;
+  }
+  
+  .card-img-top {
+    height: 200px;
+    object-fit: cover;
+  }
+  
+  .card-body {
+    background-color: #f1f1f1;
+  }
+  
+  .card-title {
+    color: #0056b3;
+  }
+  
+  .card-text {
+    color: #6c757d;
+  }
+  
+  .card-footer {
+    background-color: #f1f1f1;
+  }
+  
+  .btn-outline-primary {
+    border-color: #0056b3;
+    color: #0056b3;
+  }
+  
+  .btn-outline-primary:hover {
+    background-color: #0056b3;
+    color: #fff;
+  }
+  
+  h4 {
+    font-weight: bold;
+  }
+  
+  ul.list-group {
+    margin-top: 20px;
+  }
+  .carousel {
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  .carousel img {
+    object-fit: cover;
+    height: 250px;
+  }
+  
+  .carousel h4 {
+    font-size: 1.5rem;
+    font-weight: bold;
+  }
+  
+  .carousel p {
+    font-size: 1rem;
+    line-height: 1.4;
+  }
+  /* Custom styling for the carousel control buttons */
+.carousel-control-prev,
+.carousel-control-next {
+  background-color: black;
+  color: white;
+  border-radius: 80%;
+  width: 50px;
+  height: 50px;
+
+}
+

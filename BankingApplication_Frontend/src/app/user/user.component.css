@@ -1,0 +1,264 @@
+/* Sidebar Styles */
+
+.navBarUser{
+  display: flex; 
+  justify-content: space-between; 
+  align-items: center;
+  width: 100%;
+}
+
+.navbar-brand{
+  font-weight: 500;
+  margin-top: 4px;
+  margin-bottom: 0px;
+}
+
+.navBarUser button{
+  color: white;
+  background-color: #bb2d3b;
+  border: none;
+  outline: none;
+  border-radius: 8px;
+  padding: 5px;
+  padding-inline: 15px;
+}
+
+.sidebar {
+    background-color: #f8f9fa;
+    padding: 20px;
+  }
+  
+  .sidebar ul {
+    list-style-type: none;
+    padding: 0;
+  }
+  
+  .sidebar li {
+    padding: 10px;
+    border-bottom: 1px solid #ddd;
+    cursor: pointer;
+  }
+  
+  /* Account Creation Card */
+  .card {
+    margin-top: 20px;
+  }
+  
+  /* Navbar Styles */
+  .navbar {
+    background-color: #343a40;
+    color: white;
+  }
+  .img{
+    height: 10%;
+  }
+  
+  /* Button Styles */
+  .btn {
+    margin-left: 5px;
+  }
+  
+  /* Account dropdown */
+  .account-dropdown {
+    margin-top: 20px;
+    padding: 10px;
+    background-color: #f1f1f1;
+    border-radius: 5px;
+  }
+  /* Disable dropdown option styling */
+option:disabled {
+  color: #ccc;
+  font-style: italic;
+}
+
+  /* Responsive Layout for Small Devices */
+  @media screen and (max-width: 768px) {
+    .sidebar {
+      padding: 10px;
+    }
+  
+    .account-dropdown {
+      margin-top: 10px;
+    }
+  
+    .card-body {
+      padding: 10px;
+    }
+  
+    .navbar {
+      font-size: 14px;
+    }
+  }
+  
+  
+  /* Modal Overlay */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Modal Content */
+.modal-content {
+  background: white;
+  padding: 20px;
+  border-radius: 5px;
+  max-width: 80%;
+  width: fit-content;
+  max-height: 80%;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+  overflow: scroll;  
+}
+
+/* Modal Buttons */
+.modal-content button {
+  margin-top: 10px;
+}
+
+
+.modal-content input {
+  max-width: 100%;
+  width: 400px;
+}
+
+
+/* Container for the modal */
+.tableDiv {
+  max-width: 80%;
+}
+
+/* Table styling */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 10px;
+}
+
+table th, table td {
+  padding: 8px;
+  text-align: left;
+  border: 1px solid #ddd;
+}
+
+table th {
+  background-color: #f8f9fa;
+  font-weight: bold;
+}
+
+table td {
+  background-color: #ffffff;
+}
+
+table td, table th {
+  word-wrap: break-word; /* Allow content to wrap within cells */
+}
+
+/* Make sure the table is scrollable when the height exceeds a certain point */
+.table-responsive {
+  max-height: 400px; /* Adjust this as needed */
+  overflow-y: auto;
+}
+
+/* Styling the button */
+button {
+  margin-top: 15px;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  /* For smaller devices like tablets or phones */
+  table {
+    font-size: 12px; /* Adjust font size for smaller screens */
+  }
+  
+  table th, table td {
+    padding: 5px;
+  }
+}
+
+@media (max-width: 576px) {
+  /* For very small devices like phones */
+  table {
+    font-size: 10px; /* Further reduce font size */
+  }
+  
+  table th, table td {
+    padding: 3px;
+  }
+  
+  /* Make the table header smaller */
+  table th {
+    font-size: 11px;
+  }
+}
+
+
+/* Modal Overlay */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+/* Modal Content */
+.modal-content {
+  background: white;
+  padding: 20px;
+  border-radius: 8px;
+  width: 80%;
+  max-height: 80%;
+  overflow-y: auto;
+}
+
+/* Button Styling */
+.btn-secondary {
+  background-color: #6c757d;
+  color: white;
+  border: none;
+  padding: 10px;
+  cursor: pointer;
+}
+
+
+.fixed-sidebar {
+  position: fixed;
+  top: 0;
+  height: 100vh;
+  background-color: #f8f9fa;
+  padding: 10px;
+  overflow-y: auto;
+}
+
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.modal-content {
+  background: #fff;
+  padding: 20px;
+  border-radius: 8px;
+  width: 50%;
+  max-height: 90%;
+  overflow-y: auto;
+}

@@ -1,0 +1,86 @@
+<div class="container mt-5">
+  <h2 class="text-center mb-4">Create a New Account</h2>
+
+  <form #accountForm="ngForm" (ngSubmit)="createAccount(accountForm)" novalidate>
+
+    <!-- Username Field -->
+    <div class="mb-3">
+      <label for="username" class="form-label">Username:</label>
+      <input id="username" type="text" [(ngModel)]="username" name="username" class="form-control" placeholder="Enter your username" required />
+      <div *ngIf="accountForm.controls['username']?.invalid && accountForm.controls['username']?.touched" class="text-danger">
+        Username is required.
+      </div>
+    </div>
+
+    <!-- Email Field -->
+    <div class="mb-3">
+      <label for="email" class="form-label">Email:</label>
+      <input id="email" type="email" [(ngModel)]="email" name="email" class="form-control" placeholder="Enter your email" required email />
+      <div *ngIf="accountForm.controls['email']?.invalid && accountForm.controls['email']?.touched" class="text-danger">
+        <div *ngIf="accountForm.controls['email']?.errors?.['required']">Email is required.</div>
+        <div *ngIf="accountForm.controls['email']?.errors?.['email']">Please enter a valid email address.</div>
+      </div>
+    </div>
+
+    <!-- Password Field -->
+    <div class="mb-3">
+      <label for="password" class="form-label">Password:</label>
+      <div class="input-group">
+        <input 
+          id="password" 
+          [type]="passwordVisible ? 'text' : 'password'"  
+          [(ngModel)]="password" 
+          name="password" 
+          class="form-control" 
+          placeholder="Enter your password" 
+          required 
+          minlength="8" 
+          pattern="^(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{8,}$" />
+        <button type="button" class="input-group-text" (click)="togglePasswordVisibility()">
+          <i class="fa" [ngClass]="passwordVisible ? 'fa-eye-slash' : 'fa-eye'"></i>  <!-- Eye icon -->
+        </button>
+      </div>
+      
+      <div *ngIf="accountForm.controls['password']?.invalid && accountForm.controls['password']?.touched" class="text-danger">
+        <div *ngIf="accountForm.controls['password']?.errors?.['required']">Password is required.</div>
+        <div *ngIf="accountForm.controls['password']?.errors?.['minlength']">Password must be at least 8 characters long.</div>
+        <div *ngIf="accountForm.controls['password']?.errors?.['pattern']">Password must contain at least one uppercase letter, one number, and one special character.</div>
+      </div>
+    </div>
+    
+    <!-- Confirm Password Field -->
+    <div class="mb-3">
+      <label for="confirmPassword" class="form-label">Confirm Password:</label>
+      <div class="input-group">
+        <input 
+          id="confirmPassword" 
+          [type]="confirmPasswordVisible ? 'text' : 'password'" 
+          [(ngModel)]="confirmPassword" 
+          name="confirmPassword" 
+          class="form-control" 
+          placeholder="Confirm your password" 
+          required 
+          [ngClass]="{'is-invalid': confirmPassword && confirmPassword !== password}" />
+        <button type="button" class="input-group-text" (click)="toggleConfirmPasswordVisibility()">
+          <i class="fa" [ngClass]="confirmPasswordVisible ? 'fa-eye-slash' : 'fa-eye'"></i>  <!-- Eye icon -->
+        </button>
+      </div>
+      
+      <div *ngIf="accountForm.controls['confirmPassword']?.invalid && accountForm.controls['confirmPassword']?.touched" class="text-danger">
+        <div *ngIf="accountForm.controls['confirmPassword']?.errors?.['required']">Confirm password is required.</div>
+        <div *ngIf="confirmPassword && confirmPassword !== password" class="text-danger">Passwords do not match.</div>
+      </div>
+    </div>
+    
+
+    <!-- Submit Button -->
+    <button type="submit" [disabled]="accountForm.invalid" class="btn btn-success w-100">Create Account</button>
+
+    <div *ngIf="selectedRole === 'Customer'" class="mt-3 signUp-btn">
+      <p>Already have an Account  </p>
+      <button (click)="UserloginAccount()" >Login</button>
+    </div>
+
+
+  </form>
+</div>

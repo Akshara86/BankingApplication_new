@@ -1,0 +1,363 @@
+
+<div class="container-fluid">
+  <div class="row">
+    <!-- Sidebar -->
+    <div class="col-md-3 p-0">
+      <div class="sidebar fixed-sidebar">
+        <ul>
+          <li (click)="openLoansModal()">Loans</li>
+          <li (click)="openCardsPopup()">Cards</li>
+          <li>My QR</li>
+          <li>FAQ</li>
+          <li>Queries</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="col-md-9">
+      <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <div class="navBarUser">
+          <a class="navbar-brand" href="#">Welcome, {{userName}}</a>
+          <button *ngIf="userId" (click)="logoutBtn(userId)">Logout</button>
+        </div>
+        <div class="ml-auto">
+          <span>Notifications</span>
+          <span>Profile</span>
+        </div>
+      </nav>
+
+      <!-- Account Type Dropdown -->
+      <div class="account-dropdown">
+        <select [(ngModel)]="selectedAccountType" class="form-select" aria-label="Select Account Type">
+          <!-- Loop through available account types -->
+          <option *ngFor="let type of accountTypes" [value]="type">
+            {{ type }} {{ isAccountCreated(type) ? '(Created)' : '' }}
+          </option>
+        </select>
+
+        <!-- Show the "Create Account" button only if the account type is not created -->
+        <div *ngIf="!isAccountCreated(selectedAccountType)">
+          <!-- This section will only show if the selected account type is not created -->
+          <button class="btn btn-primary mt-3" (click)="createBtn(selectedAccountType)">
+            Create Account
+          </button>
+        </div>
+        
+        <div *ngIf="isAccountCreated(selectedAccountType)">
+          <!-- This section will only show if the selected account type is created -->
+          <button class="btn btn-danger mt-3" (click)="createOrCloseAccount(selectedAccountType)">
+            Close Account
+          </button>
+        </div>
+      </div>
+
+
+
+
+      <!-- Account Creation Form -->
+      <div *ngIf="!isAccountCreated(selectedAccountType) && !showForm" class="card mt-4">
+        <div class="card-header">
+          <h5>Create {{selectedAccountType}} Account</h5>
+        </div>
+        <div class="card-body">
+          <form (ngSubmit)="submitAccountDetails()">
+              <div class="mb-3">
+                <label for="aadhar" class="form-label">Aadhar Number</label>
+                <input type="text" id="aadhar" class="form-control" [(ngModel)]="formData.aadhar" name="aadhar" required />
+              </div>
+              <div class="mb-3">
+                <label for="pan" class="form-label">PAN Number</label>
+                <input type="text" id="pan" class="form-control" [(ngModel)]="formData.pan" name="pan" required />
+              </div>
+              <div class="mb-3">
+                <label for="initialBalance" class="form-label">Initial Balance</label>
+                <input type="number" id="initialBalance" class="form-control" [(ngModel)]="formData.initialBalance"
+                  name="initialBalance" required />
+              </div>
+              <div class="mb-3">
+                <label for="gender" class="form-label">Gender</label>
+                <select id="gender" class="form-select" [(ngModel)]="formData.gender" name="gender" required>
+                  <option value="Male">Male</option>
+                  <option value="Female">Female</option>
+                  <option value="Other">Other</option>
+                </select>
+              </div>
+              <button type="submit" class="btn btn-primary">Submit</button>
+            </form>
+        </div>
+      </div>
+
+      <!-- Display Cards for Created Accounts -->
+      <div *ngFor="let account of createdAccounts" class="card mt-4">
+        <div class="card-header">
+          <h5>{{account.type}} Account</h5>
+        </div>
+        <div class="card-body">
+          <div class="d-flex justify-content-between">
+            <p>Balance: ${{account.balance}}</p>
+            <button class="btn btn-success" (click)="performActionTransaction('Withdraw', account.accountId)">Withdraw</button>
+            <button class="btn btn-primary" (click)="performActionTransaction('Deposit', account.accountId)">Deposit</button>
+            <button class="btn btn-info" (click)="performActionTransaction('Transactions', account.accountId)">Transactions</button>
+            <button class="btn btn-warning" (click)="performActionTransaction('Transfer', account.accountId)">Transfer</button>
+          </div>
+        </div>
+      </div>
+
+    
+      <!-- Loan and Card Sections -->
+      <app-loan-section></app-loan-section>
+
+      <div class="container mt-2" style="background-color: rgb(222, 226, 243);">
+        <h3 class="pt-4">Available Cards</h3>
+        <div class="row">
+          <!-- Credit Card -->
+          <div class="col-md-6 mb-4">
+            <div class="card">
+              <div class="card-body">
+                <h5>Credit Card</h5>
+                <p>This is a Credit Card with many benefits such as cashback, rewards, and more.</p>
+                <button class="btn btn-primary" [disabled]="creditCardStatus !== 'Apply'"
+                  (click)="openCardApplicationForm('Credit')">
+                  {{ creditCardStatus }}
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Debit Card -->
+          <div class="col-md-6 mb-4">
+            <div class="card">
+              <div class="card-body">
+                <h5>Debit Card</h5>
+                <p>This is a Debit Card with features for daily use and instant transactions and many other Advantages.</p>
+                <button class="btn btn-primary" [disabled]="debitCardStatus !== 'Apply'"
+                  (click)="openCardApplicationForm('Debit')">
+                  {{ debitCardStatus }}
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Modal for Card Application Form -->
+      <div *ngIf="cardApplicationFormVisible" class="modal-overlay">
+        <div class="modal-content">
+          <h4>Apply for {{selectedCardType}} Card</h4>
+          <form (ngSubmit)="submitCardApplication()">
+
+            <div class="form-group">
+              <label for="income">Card Limit</label>
+              <input type="number" class="form-control" id="income" [(ngModel)]="cardFormData.cardLimit" name="income"
+                required>
+            </div>
+
+            <div class="form-group">
+              <label for="cardType">Card Type</label>
+              <select id="cardType" class="form-control" [(ngModel)]="cardFormData.cardType" name="cardType" required>
+                <option [value]="'CREDIT'">Credit Card</option>
+                <option [value]="'DEBIT'">Debit Card</option>
+              </select>
+            </div>
+
+            <button type="submit" class="btn btn-success">Submit Application</button>
+            <button type="button" class="btn btn-secondary" (click)="closeCardForm()">Cancel</button>
+          </form>
+        </div>
+      </div>
+
+
+       <!-- Transaction Modal -->
+<div *ngIf="showTransactionModal" class="modal-overlay">
+  <div class="modal-content">
+    <h4>{{transactionAction}} {{transactionAction === 'Transfer' ? 'Funds' : 'Amount'}}</h4>
+
+    <!-- Withdraw or Deposit -->
+    <div *ngIf="transactionAction === 'Withdraw' || transactionAction === 'Deposit'">
+      <form (ngSubmit)="submitTransaction()">
+        <div class="form-group">
+          <label for="amount">Enter Amount</label>
+          <input type="number" class="form-control" id="amount" [(ngModel)]="transactionData.amount" name="amount"
+            required>
+        </div>
+        <button type="submit" class="btn btn-success">Submit</button>
+        <button type="button" class="btn btn-secondary" (click)="closeTransactionModal()">Cancel</button>
+      </form>
+    </div>
+
+
+
+    <!-- Transfer -->
+    <div *ngIf="transactionAction === 'Transfer'">
+      <form (ngSubmit)="submitTransaction()">
+        <div class="form-group">
+          <label for="fromAccount">From Account ID</label>
+          <input type="text" class="form-control" id="fromAccount" [(ngModel)]="transactionData.fromAccount"
+            name="fromAccount" required>
+        </div>
+        <div class="form-group">
+          <label for="toAccount">To Account ID</label>
+          <input type="text" class="form-control" id="toAccount" [(ngModel)]="transactionData.toAccount"
+            name="toAccount" required>
+        </div>
+        <div class="form-group">
+          <label for="amount">Enter Amount</label>
+          <input type="number" class="form-control" id="amount" [(ngModel)]="transactionData.amount" name="amount"
+            required>
+        </div>
+        <button type="submit" class="btn btn-success">Submit</button>
+        <button type="button" class="btn btn-secondary" (click)="closeTransactionModal()">Cancel</button>
+      </form>
+    </div>
+
+    <!-- Transaction History -->
+    <div *ngIf="transactionAction === 'Transactions'">
+      <h5>Transaction History</h5>
+      
+      <table class="table table-responsive">
+        <thead>
+          <tr>
+            <th>Date</th>
+            <th>Time</th>
+            <th>From Account</th>
+            <th>To Account</th>
+            <th>Type</th>
+            <th>Amount</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let transaction of transactionHistory">
+            <td>{{ transaction.timestamp.toLocaleDateString() }}</td>
+            <td>{{ transaction.timestamp.toLocaleTimeString() }}</td>
+            <td>{{ transaction.fromAccount }}</td>
+            <td>{{ transaction.toAccount }}</td>
+            <td>{{ transaction.type }}</td>
+            <td>${{ transaction.amount }}</td>
+            <td>{{ transaction.status }}</td>
+          </tr>
+        </tbody>
+      </table>
+    
+      <button type="button" class="btn btn-secondary" (click)="closeTransactionModal()">Close</button>
+    </div>
+    
+  </div>
+</div>
+
+
+<!-- Modal for displaying Loans -->
+<div *ngIf="showLoansModal" class="modal-overlay">
+  <div class="modal-content">
+    <h4>User Loans</h4>
+    
+    <table class="table table-responsive">
+      <thead>
+        <tr>
+          <th>Loan ID</th>
+          <th>Loan Type</th>
+          <th>Loan Amount</th>
+          <th>Interest Rate</th>
+          <th>Total Amount to Pay</th>
+          <th>Status</th>
+          <th>Approved</th>
+          <th>Approved Date</th>
+          <th>Document</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let loan of loans">
+          <td>{{ loan.loanId }}</td>
+          <td>{{ loan.loanType }}</td>
+          <td>${{ loan.loanAmount }}</td>
+          <td>{{ loan.interestRate }}%</td>
+          <td>${{ loan.totalAmountToPay }}</td>
+          <td>{{ loan.status }}</td>
+          <td>{{ loan.approved ? 'Yes' : 'No' }}</td>
+          <td>{{ loan.approvedDate || 'N/A' }}</td>
+          <td><a href="{{ loan.documentUrl }}" target="_blank">View Document</a></td>
+        </tr>
+      </tbody>
+    </table>
+
+    <button type="button" class="btn btn-secondary" (click)="closeLoansModal()">Close</button>
+  </div>
+</div>
+    </div>
+
+      <!-- Card Popup -->
+      <div *ngIf="showCardsPopup" class="modal-overlay">
+        <div class="modal-content">
+          <h4>User Cards</h4>
+          <table class="table table-responsive">
+            <thead>
+              <tr>
+                <th>Card ID</th>
+                <th>Card Type</th>
+                <th>Status</th>
+                <th>Limit</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let card of userCards">
+                <td>{{ card.cardId }}</td>
+                <td>{{ card.cardType }}</td>
+                <td>{{ card.status }}</td>
+                <td>${{ card.cardLimit }}</td>
+                <td>
+                  <button
+                    *ngIf="card.status === 'ACTIVE'"
+                    class="btn btn-danger"
+                    (click)="blockCard(card.cardId)"
+                  >
+                    Block
+                  </button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+          <button class="btn btn-secondary" (click)="closeCardsPopup()">Close</button>
+        </div>
+      </div>
+
+      <!-- Card Application Form Popup -->
+      <div *ngIf="" class="modal-overlay">
+        <div class="modal-content">
+          <h4>Apply for a Card</h4>
+          <form (ngSubmit)="submitCardApplication()">
+            
+            <div class="form-group">
+              <label for="income">Card Limit</label>
+              <input
+                type="number"
+                class="form-control"
+                id="income"
+                [(ngModel)]="cardFormData.cardLimit"
+                name="income"
+                required
+              />
+            </div>
+
+            <div class="form-group">
+              <label for="cardType">Card Type</label>
+              <select
+                id="cardType"
+                class="form-control"
+                [(ngModel)]="cardFormData.cardType"
+                name="cardType"
+                required
+              >
+                <option [value]="'CREDIT'">Credit Card</option>
+                <option [value]="'DEBIT'">Debit Card</option>
+              </select>
+            </div>
+
+            <button type="submit" class="btn btn-success">Submit Application</button>
+            <button type="button" class="btn btn-secondary" (click)="closeCardApplicationForm()">Cancel</button>
+          </form>
+        </div>
+      </div>
+  </div>
+</div>

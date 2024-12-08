@@ -1,0 +1,23 @@
+#spring:
+#  datasource:
+#    driver-class-name: com.microsoft.sqlserver.jdbc.SQLServerDriver
+#    url: jdbc:sqlserver://DESKTOP-PQMC8RP\INSTANCE2022:54137;databaseName=banking_db;trustServerCertificate=true;encrypt=true;integratedSecurity=true
+#    hikari:
+#      data-source-properties:
+#        java.library.path: C:\\Windows\\System32
+
+spring:
+  data:
+    mongodb:
+      uri: mongodb+srv://aksharasathaiah:Admin.123@banckingproject.vsjdh.mongodb.net/banking_db?retryWrites=true&w=majority&appName=bankingProject
+
+
+
+jpa:
+  properties:
+    hibernate:
+      dialect: org.hibernate.dialect.SQLServerDialect
+
+server:
+  port: 8092
+

@@ -1,0 +1,49 @@
+<div class="loan-section">
+  <h3 class="m-3">Available Loans</h3>
+  <div class="row">
+    <!-- Display available loan types -->
+    <div *ngFor="let loan of loanTypes" class="col-md-4 mb-4">
+      <div class="card">
+        <img [src]="loan.image" class="card-img-top" alt="{{loan.type}} Loan">
+        <div class="card-body">
+          <h5>{{loan.type}} Loan</h5>
+          <p>Interest Rate: {{loan.interestRate}}%</p>
+          <p>Duration: {{loan.duration}} years</p>
+          <!-- Apply button for each loan type -->
+          <button class="btn btn-primary" (click)="openLoanApplicationForm(loan)">Apply</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal for Loan Application Form -->
+  <div *ngIf="loanApplicationFormVisible" class="modal-overlay">
+    <div class="modal-content">
+      <h4>Apply for {{selectedLoan.type}} Loan</h4>
+      <form (ngSubmit)="submitLoanApplication()">
+        
+        <!-- Loan Amount -->
+        <div class="form-group">
+          <label for="loanAmount">Loan Amount</label>
+          <input type="number" class="form-control" id="loanAmount" [(ngModel)]="loanFormData.loanAmount" name="loanAmount" required>
+        </div>
+
+    
+        <!-- Loan Type (hidden) -->
+        <div class="form-group" style="display: none;">
+          <input type="text" class="form-control" id="loanType" [(ngModel)]="loanFormData.loanType" name="loanType" required>
+        </div>
+
+        <!-- Document URL (Google Drive link or any URL) -->
+        <div class="form-group">
+          <label for="documentUrl">Document URL (Google Drive link)</label>
+          <input type="url" class="form-control" id="documentUrl" [(ngModel)]="loanFormData.documentUrl" name="documentUrl" required />
+        </div>
+
+        <!-- Submit and Cancel buttons -->
+        <button type="submit" class="btn btn-success">Submit Application</button>
+        <button type="button" class="btn btn-secondary" (click)="closeLoanForm()">Cancel</button>
+      </form>
+    </div>
+  </div>
+</div>

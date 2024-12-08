@@ -1,0 +1,109 @@
+<div class="dashboard-container">
+  <!-- Sidebar -->
+  <aside [class.closed]="!isSidebarOpen" class="sidebar">
+    <ul>
+      <li (click)="showDashboard()">Dashboard</li>
+      <li (click)="showTransactions()">Transactions</li>
+      <li (click)="showLoans()">Loans</li>
+      <li (click)="logout()">Logout</li>
+    </ul>
+  </aside>
+
+  <!-- Main Content -->
+  <main class="content">
+    <header>
+      <button (click)="toggleSidebar()">Toggle Sidebar</button>
+      <h1>Admin Dashboard</h1>
+    </header>
+
+    <div *ngIf="isLoading" class="loading">Loading...</div>
+
+    <!-- Dashboard Section -->
+    <div *ngIf="showDashboardSection" class="p-4">
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 extraClass">
+        <div class="card bg-white shadow-md p-4 rounded-md">
+          <h3 class="font-semibold text-lg">Active Users</h3>
+          <p class="text-xl">{{ activeUsers }}</p>
+        </div>
+        <div class="card bg-white shadow-md p-4 rounded-md">
+          <h3 class="font-semibold text-lg">Total Users</h3>
+          <p class="text-xl">{{ totalUsers }}</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Transaction Table Section (Initially Hidden) -->
+    <div *ngIf="showTransactionsSection" class="p-4">
+      <h2 class="mt-4">Transactions</h2>
+      <table class="table-auto w-full mt-4">
+        <thead>
+          <tr>
+            <th class="px-4 py-2 border">From Account</th>
+            <th class="px-4 py-2 border">To Account</th>
+            <th class="px-4 py-2 border">Amount</th>
+            <th class="px-4 py-2 border">Type</th>
+            <th class="px-4 py-2 border">Status</th>
+            <th class="px-4 py-2 border">Timestamp</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let transaction of transactions">
+            <td class="px-4 py-2 border">{{ transaction.fromAccount }}</td>
+            <td class="px-4 py-2 border">{{ transaction.toAccount }}</td>
+            <td class="px-4 py-2 border">{{ transaction.amount }}</td>
+            <td class="px-4 py-2 border">{{ transaction.type }}</td>
+            <td class="px-4 py-2 border">{{ transaction.status }}</td>
+            <td class="px-4 py-2 border">{{ transaction.timestamp }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Loans Section (Initially Hidden) -->
+    <div *ngIf="showLoansSection" class="p-4">
+      <h2 class="mt-4">Loans</h2>
+      <div *ngIf="isLoanLoading" class="loading">Loading loans...</div>
+      <table class="table-auto w-full mt-4" *ngIf="!isLoanLoading">
+        <thead>
+          <tr>
+            <th class="px-4 py-2 border">Loan ID</th>
+            <th class="px-4 py-2 border">User ID</th>
+            <th class="px-4 py-2 border">Loan Amount</th>
+            <th class="px-4 py-2 border">Interest Rate</th>
+            <th class="px-4 py-2 border">Total Amount</th>
+            <th class="px-4 py-2 border">Document</th>
+            <th class="px-4 py-2 border">Status</th>
+            <th class="px-4 py-2 border">Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let loan of loans">
+            <td class="px-4 py-2 border truncate" style="max-width: 150px;">{{ loan.loanId }}</td>
+            <td class="px-4 py-2 border truncate" style="max-width: 150px;">{{ loan.userId }}</td>
+            <td class="px-4 py-2 border truncate" style="max-width: 150px;">{{ loan.loanAmount }}</td>
+            <td class="px-4 py-2 border truncate" style="max-width: 100px;">{{ loan.interestRate }}%</td>
+            <td class="px-4 py-2 border truncate" style="max-width: 150px;">{{ loan.totalAmountToPay }}</td>
+            <td class="px-4 py-2 border truncate" style="max-width: 200px;">
+              <a href="{{ loan.documentUrl }}" target="_blank" class="text-blue-500">View Document</a>
+            </td>
+            <td class="px-4 py-2 border">{{ loan.approved ? 'Approved' : 'Not Approved' }}</td>
+            <!-- <td class="px-4 py-2 border">{{ loan.status }}</td> -->
+            <td class="px-4 py-2 border">
+              <!-- Approve Button: Only show if loan is active and not approved -->
+              <button 
+                *ngIf="loan.status === 'ACTIVE' && !loan.approved" 
+                (click)="approveLoan(loan.id)" 
+                class="bg-blue-500 text-white px-4 py-2 rounded"
+                [disabled]="loan.approved"
+                title="Approve Loan">
+                Approve
+              </button>
+              <!-- If already approved, show an "Approved" message instead -->
+              <span *ngIf="loan.approved" class="text-green-500">Approved</span>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </main>
+</div>
